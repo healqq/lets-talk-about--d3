@@ -1,0 +1,267 @@
+doctype html
+html
+  head
+      title Lets talk about ... d3.js by Nick
+      meta(charset='utf-8')
+      script(src='assets/vendor/slides.js')
+      link(href='styles.css'  rel='stylesheet' type='text/css')
+      link(href='flex.css'  rel='stylesheet' type='text/css')
+      script(src="https://d3js.org/d3.v4.min.js")
+    body
+      section.slides.layout-regular.template-default
+        article
+          h2 Lets Talk about...
+          h1 &nbsp;
+        article
+          h2 Lets Talk about...
+          h1 d3.js
+        article
+          h1 What is d3.js?
+        article
+          h2 What is d3.js?
+          ul.build
+            li D3.js is a JavaScript library for manipulating documents based on data. D3 helps you bring data to life using HTML, SVG, and CSS.
+            li Open source
+        article
+          h2 What can you do with it?
+        article.image(data-src="assets/images/ex-1.png")
+        article.image(data-src="assets/images/ex-2.png")
+        article.image(data-src="assets/images/ex-3.png")
+        article
+          h2 Core concept
+        article
+          h2 data binding
+          ul
+            li You don't work with DOM, you work with data
+            li d3 binds your data to DOM elements
+            li provides API to control adding, removing and updating of elements
+        article
+          h2 Enter, Update, Exit
+        article
+          h2 Enter
+          ul
+            li Triggers for new data items, that don't have a corresponding DOM element
+        article 
+          h2 Enter
+          pre.h0
+            |d3.select("#ex1")
+            | .selectAll("span")
+            | .data([4, 8, 15, 16, 23, 42])
+            | .enter().append("span")
+            | .text(d => `I’m number ${d}!`);
+          div#ex1.example
+          script.
+            d3.select("#ex1")
+            .selectAll("span")
+            .data([4, 8, 15, 16, 23, 42])
+            .enter().append("span")
+            .text(d => `I’m number ${d}!`);
+        article
+          h2 Update
+          ul
+            li Triggers for data elements, that already have a DOM element
+        article
+          h2 Update
+          pre.h0
+            |d3.select("#ex2")
+            | .selectAll("span")
+            | .data([4, 8, 15, 16, 23, 42])
+            | .enter().append("span")
+            | .text(d => `I’m number ${d}!`);
+            |d3.select("#ex2")
+            | .selectAll("span").data([4, 8, 15, 16, 23, 42])
+            |  .text(d => `I was here before, ${d}!`)
+          div#ex2.example
+          script.
+            d3.select("#ex2")
+              .selectAll("span")
+              .data([4, 8, 15, 16, 23, 42])
+              .enter().append("span")
+              .text(d => `I’m number ${d}!`);
+            d3.select("#ex2")
+              .selectAll("span")
+              .data([4, 8, 15, 16, 23, 42])
+              .text(d => `I was here before, ${d}!`)
+        article
+          h2 Exit
+          ul
+            li Triggers for data items, that don't have a corresponding data element 
+        article
+          h2 Exit
+          pre.h0
+            |d3.select("#ex2")
+            | .selectAll("span")
+            | .data([4, 8, 15, 16, 23, 42])
+            | .enter().append("span")
+            | .text(d => `I’m number ${d}!`);
+            |d3.select("#ex2")
+            | .selectAll("span").data([4, 8, 15])
+            |  .exit()
+            |  .remove()
+          div#ex3.example
+          script.
+            d3.select("#ex3")
+              .selectAll("span")
+              .data([4, 8, 15, 16, 23, 42])
+              .enter().append("span")
+              .text(d => `I’m number ${d}!`);
+            d3.select("#ex3")
+              .selectAll("span").data([4, 8, 15])
+              .exit()
+              .remove()
+        article
+          h2 example
+          ul
+           li
+            a(href="https://bl.ocks.org/TheMcMurder/raw/4176a5eaed4df876c6db/") example
+        article.image(data-src="assets/memes/thats-all-folks.jpg")
+        article
+          h2 just kidding
+        article
+          h2 How to build a plot
+        article.image(data-src="assets/memes/ikea.jpg")
+        article
+          h2 plot example
+          ul
+            li scales
+            li axes
+            li points(lines/bars/whatever)
+        article
+          h2 scales
+          ul
+            li We need a way to convert our "values domain" to "plot range"
+            li We have linear, pow and log scales, time scale, quantile and threshold scales
+          pre.h0
+            |function convert(domain, range, value) {
+            |  return range[0] + (domain[1] - domain[0]) * range[1];  
+            |}
+        article
+          h2 scales
+          pre.h0
+            |const values = [4, 8, 15, 16, 23, 42];
+            |const scale = d3.scaleLinear()
+            |.domain([Math.min(...values), Math.max(...values)])
+            |.range([0, 100]);
+            |d3.select("#ex4").selectAll("span")
+            | .data(values).enter().append("span")
+            | .text(d => `I’m number ${scale(d)}!`);
+          #ex4.example
+          script.
+            const values = [4, 8, 15, 16, 23, 42];
+            const scale = d3.scaleLinear().domain([Math.min(...values), Math.max(...values)]).range([0, 100]);
+            d3.select("#ex4")
+              .selectAll("span")
+              .data(values)
+              .enter().append("span")
+              .text(d => `I’m number ${scale(d)}!`);
+        article 
+          h2 axes
+            ul
+              li Axes always correspond to the scale
+              li d3 allows to easily manipulate amout of ticks, format, appearance and position of axes and ticks
+        article
+          h2 axes
+          pre.h0
+            |const values = [4, 8, 15, 16, 23, 42];
+            |const scale = d3.scaleLinear()
+            |.domain([Math.min(...values), Math.max(...values)])
+            |const axis = d3.axisBottom(scale);
+          #ex5.example
+          script.
+            const axis = d3.axisBottom(scale);
+            d3.select("#ex5")
+            .append("svg")
+            .attr("viewBox", "0 0 150 100")
+            .attr("width", "400px")
+            .attr("height", "300px")
+            .append("g")
+            .attr("transform", "translate(0,30)")
+            .call(axis);
+        article
+          h2 actual plot
+          ul
+            li With d3 you can create any svg elements you want
+            li most of the times it will be <rects/> for bar plots
+            li for lines you have buildins to generate lines from points with different interpolation settings (beziers and other stuff)
+        article
+          h2 Okay, let's do a bar plot
+          pre.h0
+            |svg.append("g")
+            |  .selectAll('rect')
+            |  .data(values)
+            |  .enter().append('rect')
+            |  .attr('x', 0)
+            |  .attr('width', d => scale(d))
+            |  .attr('y', (d, i) => i * 5)
+            |  .attr('height', 3)
+            |  .fill('green');
+        article
+          h2 Okay, we did it
+          #ex6.example
+          script.
+            const color = d3.scaleOrdinal(d3.schemeCategory10);
+            const transition = d3.transition()
+              .delay(1000)
+              .duration(750)
+              .ease(d3.easeLinear);
+            const svg = d3.select("#ex6")
+              .append("svg")
+              .attr('viewBox', "0 0 100 150")
+              .attr("width", "1000px")
+              .attr("height", "800px");
+            svg.append("g")
+              .attr("transform", "translate(0, 30)")
+              .call(axis);
+            svg.append("g")
+              .selectAll('rect')
+              .data(values)
+              .enter().append('rect')
+              .attr('x', 0)
+              .attr('width', 0)
+              .attr('y', (d, i) => i * 5)
+              .attr('height', 3)
+              .attr('fill', (d, i) => color(i))
+              .transition(transition)
+              .attr('width', d => scale(d));
+          
+        article.image(data-src="assets/memes/i-lied.png")
+        article
+          h2 I lied
+        article
+          h2 transitions
+          ul 
+            li D3 has transition built-ints, they look similar to jQuery
+            li Here's the one I used ;)
+          pre.h0
+            |const transition = d3.transition()
+            |   .delay(1000)
+            |   .duration(750)
+            |   .ease(d3.easeLinear);
+            | 
+            |  .data(...)
+            |  ...
+            |  .attr('wdith', 0)
+            |  .transition(transition)
+            |  .attr('width', d => scale(d));  
+        article
+          h2 That's all for today
+        article
+          h2 Whats next?
+          ul.build
+            li
+              a(href="https://d3js.org/")
+                | Library website
+            li
+              a(href="https://github.com/d3/d3/wiki/Gallery")
+                | Interactive examples!
+            li
+              a(href="https://flowingdata.com/")
+                | Even cooler (interactivER) examples 
+            li
+              a(href="https://healqq.github.io/lets-talk-about---d3")
+                | Slides
+                
+        article.section
+          h1 Questions?
+
+      script(src='assets/scripts/main.js')
