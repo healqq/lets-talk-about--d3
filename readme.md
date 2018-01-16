@@ -1,5 +1,3 @@
-# Lets talk about - Flexbox by Nick
+# Lets talk about - d3.js by Nick
 
-[View Slides](http://healqq.github.io/lets-talk-about---flexbox)
-
-[Flexbox interactive demo](http://healqq.github.io/flex-demo)
+[View Slides](http://healqq.github.io/lets-talk-about---d3)
